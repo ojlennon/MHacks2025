@@ -1,0 +1,7 @@
+#!bin/bash
+
+set -Eeuo pipefail
+set +x
+
+pip install -e .
+uvicorn coppa.main:app --reload;

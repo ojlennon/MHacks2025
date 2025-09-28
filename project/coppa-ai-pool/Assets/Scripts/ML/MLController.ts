@@ -1,20 +1,20 @@
 import { CameraService } from "../CameraService";
 import { DetectionController } from "./DetectionController";
 import { DetectionHelpers } from "./DetectionHelpers";
-import { PoolTablePredictor } from "../PoolTablePredictor";
+// import { PoolTablePredictor } from "../PoolTablePredictor"; // Not needed for license plates
 
 type GridEntry = [number, number];
 
 @component
 export class MLController extends BaseScriptComponent {
   @input() cameraService: CameraService;
-  @input() poolTablePredictor: PoolTablePredictor;
+  // @input() poolTablePredictor: PoolTablePredictor; // Not needed for license plates
   @input() model: MLAsset;
   @input() modelInfo: boolean;
 
   @input()
   @widget(new SliderWidget(0, 1, 0.01))
-  scoreThreshold: number = 0.33;
+  scoreThreshold: number = 0.1; // Lowered for license plate detection
 
   @input()
   @widget(new SliderWidget(0, 1, 0.01))
@@ -32,48 +32,42 @@ export class MLController extends BaseScriptComponent {
   @input()
   detectionController: DetectionController;
 
-  // These are the labels 0 is cue ball, 16 is pockets, the rest are the balls
+  // COCO classes - we'll focus on vehicles that have license plates
   private classSettings: { label: string; enabled: boolean }[] = [
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "11",
-    "12",
-    "13",
-    "14",
-    "15",
-    "16",
-  ].map((label) => ({ label: label, enabled: true }));
+    "person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck", "boat", "traffic light",
+    "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat", "dog", "horse", "sheep", "cow",
+    "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella", "handbag", "tie", "suitcase", "frisbee",
+    "skis", "snowboard", "sports ball", "kite", "baseball bat", "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle",
+    "wine glass", "cup", "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange",
+    "broccoli", "carrot", "hot dog", "pizza", "donut", "cake", "chair", "couch", "potted plant", "bed",
+    "dining table", "toilet", "tv", "laptop", "mouse", "remote", "keyboard", "cell phone", "microwave", "oven",
+    "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"
+  ].map((label, index) => ({ 
+    label: label, 
+    enabled: index === 2 || index === 5 || index === 7 // Only enable car, bus, truck
+  }));
 
-  private classCount: number = this.classSettings.length;
+  private classCount: number = 80; // COCO has 80 classes
 
   private anchors: number[][][] = [
     [
-      [144, 300],
-      [304, 220],
-      [288, 584]
+      [19, 27],
+      [44, 40],
+      [38, 94]
     ],
     [
-      [568, 440],
-      [768, 972],
-      [1836, 1604]
+      [96, 68],
+      [86, 152],
+      [180, 137]
     ],
     [
-      [48, 64],
-      [76, 144],
-      [160, 112]
+      [140, 301],
+      [303, 264],
+      [238, 542]
     ],
   ];
 
-  private strides: number[] = [16, 32, 8];
+  private strides: number[] = [8, 16, 32];
 
   private currentFrame: number = 0;
 
@@ -108,13 +102,17 @@ export class MLController extends BaseScriptComponent {
     this.inputs = this.mlComponent.getInputs();
 
     this.printInfo("Model built");
-
+    print("[LOG] Model loaded - Inputs: " + this.inputs.length + ", Outputs: " + this.outputs.length);
+    
     // build grids
     for (let i = 0; i < this.outputs.length; i++) {
       const shape = this.outputs[i].shape;
+      print("[LOG] Output " + i + " shape: " + shape.x + "x" + shape.y + "x" + shape.z);
       this.grids.push(this.makeGrid(shape.x, shape.y));
     }
     this.inputShape = this.inputs[0].shape;
+    print("[LOG] Input shape: " + this.inputShape.x + "x" + this.inputShape.y + "x" + this.inputShape.z);
+    print("[LOG] Class count: " + this.classCount + ", Score threshold: " + this.scoreThreshold);
     this.inputs[0].texture = this.cameraService.screenCropTexture;
     // run on update
     //this.mlComponent.runScheduled(true, MachineLearning.FrameTiming.Update, MachineLearning.FrameTiming.Update);
@@ -148,12 +146,13 @@ export class MLController extends BaseScriptComponent {
    * process outputs on each update
    */
   private onUpdate(runTimeStamp: number) {
-    let frameSkip = this.poolTablePredictor.tableAligned ? 0 : 5;
+    let frameSkip = 0; // No table alignment needed for license plates
     if (!this.isRunning) this.currentFrame++;
     if (this.currentFrame >= frameSkip && !this.isRunning) {
       this.currentFrame = 0;
       this.isRunning = true;
-
+      
+      print("[LOG] Running ML inference at timestamp: " + runTimeStamp);
       this.runTimeStamp =  runTimeStamp;
       let runImmediate = this.cameraService.isEditor || global.scene.isRecording();
       if (runImmediate) {
@@ -172,7 +171,6 @@ export class MLController extends BaseScriptComponent {
         delay.reset(0.01);
       } else {
         this.mlComponent.runImmediate(runImmediate);
-        print(runImmediate);
       }
       
     }
@@ -181,6 +179,8 @@ export class MLController extends BaseScriptComponent {
   private onRunningFinished() {
     this.parseYolo7Outputs(this.outputs);
 
+    print("[LOG] ML finished - Raw detections: " + this.boxes.length + " boxes, " + this.scores.length + " scores");
+
     let result = DetectionHelpers.nms(
       this.boxes,
       this.scores,
@@ -188,12 +188,15 @@ export class MLController extends BaseScriptComponent {
       this.iouThreshold
     ).sort(DetectionHelpers.compareByScoreReversed);
 
+    print("[LOG] After NMS: " + result.length + " detections (threshold: " + this.scoreThreshold + ")");
+
     for (let i = 0; i < result.length; i++) {
       if (
         this.classSettings.length > result[i].index &&
         this.classSettings[result[i].index].label
       ) {
         result[i].label = this.classSettings[result[i].index].label;
+        print("[LOG] Detection " + i + ": class=" + result[i].index + " (" + result[i].label + "), confidence=" + result[i].score.toFixed(3));
       }
     }
 
@@ -203,7 +206,8 @@ export class MLController extends BaseScriptComponent {
       this.detectionController.onUpdate(result);
     }
 
-    this.poolTablePredictor.updateDetections(result);
+    // No pool table predictor needed for license plates
+    // TODO: Add license plate text extraction here
     
 
     this.isRunning = false;
@@ -229,6 +233,8 @@ export class MLController extends BaseScriptComponent {
     this.boxes = [];
     this.scores = [];
     const num_heads = outputs.length;
+    print("[LOG] Parsing YOLO outputs - " + num_heads + " heads, " + this.classCount + " classes");
+    let totalDetections = 0;
     for (let i = 0; i < num_heads; i++) {
       const output = outputs[i];
       const data = output.data;
@@ -253,6 +259,7 @@ export class MLController extends BaseScriptComponent {
             let conf = data[idx + 4];
 
             if (conf > this.scoreThreshold) {
+              // print("[DEBUG] YOLO Parse - Found detection with conf: " + conf);
               x = (x * 2 - 0.5 + this.grids[i][dy][dx][0]) * this.strides[i];
               y = (y * 2 - 0.5 + this.grids[i][dy][dx][1]) * this.strides[i];
               w = w * w * this.anchors[i][da][0];
@@ -281,12 +288,15 @@ export class MLController extends BaseScriptComponent {
               if (res.score > 0) {
                 this.boxes.push(box as [number, number, number, number]);
                 this.scores.push(res);
+                totalDetections++;
               }
             }
           }
         }
       }
     }
+    print("[LOG] Parse complete - Found " + totalDetections + " raw detections above threshold " + this.scoreThreshold);
+    print("[LOG] Enabled classes: car(" + this.classSettings[2].enabled + "), bus(" + this.classSettings[5].enabled + "), truck(" + this.classSettings[7].enabled + ")");
     return [this.boxes, this.scores];
   }
 

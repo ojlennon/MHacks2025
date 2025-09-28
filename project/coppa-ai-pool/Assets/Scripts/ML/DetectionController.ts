@@ -60,23 +60,7 @@ export class DetectionController extends BaseScriptComponent {
   private trackletObjects: Tracklet[];
 
   private colors = [
-    new vec4(1.0, 1.0, 1.0, 1), // white - cue ball
-    new vec4(1.0, 0.5, 0.0, 1), // yellow - ball 1
-    new vec4(0.0, 0.0, 1.0, 1), // blue - ball 2
-    new vec4(1.0, 0.0, 0.0, 1), // red - ball 3
-    new vec4(0.5, 0.0, 0.5, 1), // purple - ball 4
-    new vec4(1.0, 0.5, 0.0, 1), // orange - ball 5
-    new vec4(0.0, 0.5, 0.0, 1), // green - ball 6
-    new vec4(0.5, 0.0, 0.0, 1), // maroon - ball 7
-    new vec4(0.0, 0.0, 0.0, 1), // black - ball 8
-    new vec4(1.0, 0.5, 0.0, 1), // yellow - ball 9
-    new vec4(0.0, 0.0, 1.0, 1), // blue - ball 10
-    new vec4(1.0, 0.0, 0.0, 1), // red - ball 11
-    new vec4(0.5, 0.0, 0.5, 1), // purple - ball 12
-    new vec4(1.0, 0.5, 0.0, 1), // orange - ball 13
-    new vec4(0.0, 0.5, 0.0, 1), // green - ball 14
-    new vec4(0.5, 0.0, 0.0, 1), // maroon - ball 15
-    new vec4(0.0, 0.0, 0.0, 1), // black - pocket
+    new vec4(1.0, 1.0, 0.0, 1), // yellow - license plate
   ];
 
   onAwake() {

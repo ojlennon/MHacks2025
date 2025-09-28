@@ -4890,12 +4890,11 @@
   ScriptInputs:
     "":
       cameraService: !<MappingBased.AssignableType> bc32538e-25a1-435b-b143-b3eb94129b12
-      poolTablePredictor: !<MappingBased.AssignableType_1> b8b74731-551d-40a9-bf2d-06296aed3330
-      model: !<reference.MLAsset> f4c8a881-9d46-4961-8dcf-91166aa374f7
+      model: !<reference.MLAsset> ebd70571-f85e-45cb-8749-9dc37e7f7cb8
       modelInfo: false
       scoreThreshold: 0.100000
       iouThreshold: 0.500000
-      detectionController: !<MappingBased.AssignableType_2> e79839d0-2ba1-4847-851d-fd3f444a46fd
+      detectionController: !<MappingBased.AssignableType_1> e79839d0-2ba1-4847-851d-fd3f444a46fd
   ScriptTypes:
     "":
       {}

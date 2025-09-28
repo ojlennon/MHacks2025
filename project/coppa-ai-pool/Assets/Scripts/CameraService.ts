@@ -32,7 +32,7 @@ export class CameraService extends BaseScriptComponent {
   public cropInitialized = true;
   private cameraId: CameraModule.CameraId;
 
-  public inputSize = 512;
+  public inputSize = 320;
 
   public frameCallback = (timestamp: number) => {};
 
@@ -143,34 +143,27 @@ export class CameraService extends BaseScriptComponent {
         target.resolution = res;
       }
 
-      let dim = Math.min(w, h);
-      let inputSize = new vec2(dim, dim);
-
+      // For license plates, use larger crop area to capture more of the scene
       let imageSize = new vec2(w, h);
       let cropRect: Rect = this.cropProvider.cropRect;
+      
+      // Use larger square crop (80% of the smaller dimension instead of 100%)
+      let cropDim = Math.min(w, h) * 1.0; // Use full smaller dimension
+      let inputSize = new vec2(cropDim, cropDim);
+      
       let size = inputSize.div(imageSize).uniformScale(2);
       cropRect.setSize(size);
 
       let xCenter = imageSize.x * 0.5;
       let yCenter = imageSize.y * 0.5;
 
-      if (!this.isEditor) {
-        //offset to the inside of the camera to make it appear more centered
-        if (this.cameraId == CameraModule.CameraId.Right_Color) {
-          xCenter = Math.floor(inputSize.x * 0.5);
-        } else {
-          xCenter = Math.floor(imageSize.x - inputSize.x * 0.5);
-        }
-      }
-
-
-      //normalize the crop region to [-1,+1]
+      // Center the crop (no offset for license plates)
       let center = new vec2(xCenter, yCenter)
         .div(imageSize)
         .uniformScale(2)
         .sub(vec2.one());
       cropRect.setCenter(center);
-
+      
       this.cropProvider.cropRect = cropRect;
 
       let minCropResolution = Math.min(
@@ -180,6 +173,17 @@ export class CameraService extends BaseScriptComponent {
 
 
       this.cropInitialized = true;
+      
+      print("[LOG] Camera setup complete - Input size: " + this.inputSize + "x" + this.inputSize);
+      print("[LOG] Camera resolution: " + this.cameraModel.resolution.x + "x" + this.cameraModel.resolution.y);
+      
+      // Show what the model sees in the debug image
+      if (this.debugImage) {
+        this.debugImage.mainMaterial.mainPass.baseTex = this.screenCropTexture;
+        this.debugImage.getSceneObject().enabled = true;
+        print("[LOG] Debug image enabled");
+      }
+      
       this.MLController.init();
     }
   }

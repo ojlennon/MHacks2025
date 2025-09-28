@@ -32,7 +32,6 @@
     iouThreshold: false
     model: false
     modelInfo: false
-    poolTablePredictor: false
     scoreThreshold: false
   ScriptTypesHidden:
     {}
@@ -40,20 +39,18 @@
   DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
   DefaultScriptInputs:
     - cameraService: !<MappingBased.AssignableType> 00000000-0000-0000-0000-000000000000
-      poolTablePredictor: !<MappingBased.AssignableType_1> 00000000-0000-0000-0000-000000000000
       model: !<reference.MLAsset> 00000000-0000-0000-0000-000000000000
       modelInfo: false
       scoreThreshold: 0.400000
       iouThreshold: 0.500000
-      detectionController: !<MappingBased.AssignableType_2> 00000000-0000-0000-0000-000000000000
+      detectionController: !<MappingBased.AssignableType_1> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}
   InputLines:
     - // @input AssignableType cameraService
-    - // @input AssignableType_1 poolTablePredictor
     - // @input Asset.MLAsset model
     - // @input bool modelInfo
-    - '// @input float scoreThreshold = 0.33 {"widget":"slider", "min":0, "max":1, "step":0.01}'
+    - '// @input float scoreThreshold = 0.1 {"widget":"slider", "min":0, "max":1, "step":0.01}'
     - '// @input float iouThreshold = 0.5 {"widget":"slider", "min":0, "max":1, "step":0.01}'
-    - // @input AssignableType_2 detectionController
+    - // @input AssignableType_1 detectionController

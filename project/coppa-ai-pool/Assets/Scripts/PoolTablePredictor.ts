@@ -38,18 +38,19 @@ export class PoolTablePredictor extends BaseScriptComponent {
 
   private poolTableFound = false;
 
-  public tableAligned = this.isEditor;
+  public tableAligned = true; // Always true for license plate detection
 
   private multiObjectTracking = new MultiObjectTracking(
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6], //max class counts
-    POOL_BALL_DIAMETER_CM * 3, //max distance
-    POOL_BALL_DIAMETER_CM * 0.25, //merge distance
-    20, // max tracklets
-    0.25 // max lost time
+    [10], // Max 10 license plates
+    50, // Max distance in cm for license plates
+    10, // Merge distance in cm
+    20, // Max tracklets
+    1.0 // Max lost time (longer for license plates)
   );
 
   onAwake() {
-    this.updateMarkers();
+    // Skip marker setup for license plates
+    // this.updateMarkers();
     this.createEvent("OnStartEvent").bind(this.onStart.bind(this));
     this.createEvent("UpdateEvent").bind(this.onUpdate.bind(this));
   }
@@ -91,7 +92,7 @@ export class PoolTablePredictor extends BaseScriptComponent {
       this.hasMovedRightMarker = true;
       this.tableAligned = true;
       this.updateHint("");
-      this.updateMarkers();
+      // this.updateMarkers(); // Skip for license plates
     });
 
     interactableLeft.onInteractorTriggerStart(() => {
@@ -108,12 +109,19 @@ export class PoolTablePredictor extends BaseScriptComponent {
       this.resetAlignment();
     });
     this.resetButton.enabled = false;
+    
+    // Hide markers for license plate detection
+    this.cornerLeftMarker.enabled = false;
+    this.cornerRightMarker.enabled = false;
+    this.markerLeft.enabled = false;
+    this.markerRight.enabled = false;
 
     if (!this.isEditor) {
-      this.resetAlignment();
+      // Skip alignment for license plates
+      // this.resetAlignment();
     }
 
-    this.updateHint("Find a pool table...");
+    this.updateHint("Looking for license plates...");
   }
 
   resetAlignment() {

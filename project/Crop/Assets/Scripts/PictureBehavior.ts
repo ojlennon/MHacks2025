@@ -133,6 +133,18 @@ export class PictureBehavior extends BaseScriptComponent {
     }
 
     this.caption.openCaption(text, captionPos, captionRot, textColor);
+    
+    // Auto-destroy the entire scanner after 8 seconds (3 seconds after caption disappears)
+    this.scheduleDestroy();
+  }
+
+  private scheduleDestroy() {
+    var destroyTimer = this.createEvent("DelayedCallbackEvent");
+    destroyTimer.bind(() => {
+      print("Auto-destroying scanner after caption timeout");
+      this.getSceneObject().destroy();
+    });
+    destroyTimer.reset(8.0); // 8 seconds total (caption disappears at 5, scanner destroys at 8)
   }
 
   private getTextColor(response?: LicensePlateResponse): vec4 {

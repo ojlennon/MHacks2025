@@ -51,6 +51,6 @@
     - // @input AssignableType cameraService
     - // @input Asset.MLAsset model
     - // @input bool modelInfo
-    - '// @input float scoreThreshold = 0.1 {"widget":"slider", "min":0, "max":1, "step":0.01}'
+    - '// @input float scoreThreshold = 0.5 {"widget":"slider", "min":0, "max":1, "step":0.01}'
     - '// @input float iouThreshold = 0.5 {"widget":"slider", "min":0, "max":1, "step":0.01}'
     - // @input AssignableType_1 detectionController

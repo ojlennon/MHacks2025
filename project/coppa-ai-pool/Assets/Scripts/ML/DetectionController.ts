@@ -22,9 +22,9 @@ export class DetectionController extends BaseScriptComponent {
   objectToCopy: SceneObject;
 
   @input()
-  @hint("Number of instances of the object")
+  @hint("Maximum number of vehicle detections to display")
   @widget(new SliderWidget(0, 100, 1))
-  maxCount: number = 70;
+  maxCount: number = 20; // Reduced for typical vehicle scenarios
 
   @input
   @hint("set object position")
@@ -60,7 +60,14 @@ export class DetectionController extends BaseScriptComponent {
   private trackletObjects: Tracklet[];
 
   private colors = [
-    new vec4(1.0, 1.0, 0.0, 1), // yellow - license plate
+    new vec4(1.0, 0.0, 0.0, 1), // red for index 0
+    new vec4(0.0, 1.0, 0.0, 1), // green for index 1
+    new vec4(1.0, 0.5, 0.0, 1), // orange for car (COCO index 2)
+    new vec4(0.0, 0.0, 1.0, 1), // blue for index 3
+    new vec4(1.0, 0.0, 1.0, 1), // magenta for index 4
+    new vec4(0.0, 1.0, 1.0, 1), // cyan for bus (COCO index 5)
+    new vec4(1.0, 1.0, 0.0, 1), // yellow for index 6
+    new vec4(0.5, 0.5, 1.0, 1), // light blue for truck (COCO index 7)
   ];
 
   onAwake() {
@@ -73,10 +80,12 @@ export class DetectionController extends BaseScriptComponent {
   }
 
   updateDetection(tracklet: Tracklet, detection: Detection) {
-    // Set material color based on script index
+    // Set material color based on COCO class index
     tracklet.detection = detection;
     let object = tracklet.sceneObject;
-    let col = this.colors[detection.index];
+    // Map COCO class indices to color array indices
+    let colorIndex = detection.index < this.colors.length ? detection.index : 0;
+    let col = this.colors[colorIndex];
     let child = object.getChild(0);
     if (child && child.getComponent("Component.Image")) {
       child.getComponent("Component.Image").mainMaterial.mainPass.baseColor = col;
@@ -94,6 +103,15 @@ export class DetectionController extends BaseScriptComponent {
 
   public onUpdate(detections: Detection[]) {
     this.debugImage.getSceneObject().enabled = true;
+    print("[DETECTION] Updating " + detections.length + " detections");
+    
+    // Only log first few detections to avoid spam
+    for (let i = 0; i < Math.min(detections.length, 5); i++) {
+      print("[DETECTION] " + i + ": " + detections[i].label + " (class " + detections[i].index + 
+            ") score=" + detections[i].score.toFixed(3) + 
+            " bbox=[" + detections[i].bbox.join(",") + "]");
+    }
+    
     if (this.matchDetections) {
       this.updateDetectionBoxesWithMatching(detections);
     } else {

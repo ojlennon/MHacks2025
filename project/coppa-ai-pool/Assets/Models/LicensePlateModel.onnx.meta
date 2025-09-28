@@ -35,7 +35,7 @@
     Outputs:
       - !<MLOutput>
         Name: output
-        Shape: {x: 28.000000, y: 28.000000, z: 18.000000}
+        Shape: {x: 28.000000, y: 28.000000, z: 255.000000}
         Normalizations:
           - scale: 1.000000
             bias: 0.000000
@@ -77,7 +77,7 @@
         OutputTexture: !<reference> 00000000-0000-0000-0000-000000000000
       - !<MLOutput>
         Name: 262
-        Shape: {x: 20.000000, y: 20.000000, z: 255.000000}
+        Shape: {x: 14.000000, y: 14.000000, z: 255.000000}
         Normalizations:
           - scale: 1.000000
             bias: 0.000000
@@ -593,7 +593,7 @@
         OutputTexture: !<reference> 00000000-0000-0000-0000-000000000000
       - !<MLOutput>
         Name: 263
-        Shape: {x: 10.000000, y: 10.000000, z: 255.000000}
+        Shape: {x: 7.000000, y: 7.000000, z: 255.000000}
         Normalizations:
           - scale: 1.000000
             bias: 0.000000

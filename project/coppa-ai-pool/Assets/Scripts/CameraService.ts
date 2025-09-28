@@ -32,7 +32,7 @@ export class CameraService extends BaseScriptComponent {
   public cropInitialized = true;
   private cameraId: CameraModule.CameraId;
 
-  public inputSize = 320;
+  public inputSize = 224; // Match the model's expected input size
 
   public frameCallback = (timestamp: number) => {};
 

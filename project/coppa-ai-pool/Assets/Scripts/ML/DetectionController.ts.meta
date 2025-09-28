@@ -54,7 +54,7 @@
   InputLines:
     - '// @input Component.Image debugImage {"hint":"Debug Image"}'
     - '// @input SceneObject objectToCopy {"hint":"Object used to copy and place over the detected objects"}'
-    - '// @input float maxCount = 70 {"hint":"Number of instances of the object", "widget":"slider", "min":0, "max":100, "step":1}'
+    - '// @input float maxCount = 20 {"hint":"Maximum number of vehicle detections to display", "widget":"slider", "min":0, "max":100, "step":1}'
     - '// @input bool setObjectPosition = true {"hint":"set object position"}'
     - '// @input bool matchDetections {"hint":"try to match current detections with ones from the previous frame, reuse same scene objects if match"}'
     - '// @ui {"widget":"group_start", "label":"Match Settings", "showIf":"matchDetections"}'

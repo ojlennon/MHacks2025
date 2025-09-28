@@ -14,7 +14,7 @@ export class MLController extends BaseScriptComponent {
 
   @input()
   @widget(new SliderWidget(0, 1, 0.01))
-  scoreThreshold: number = 0.1; // Lowered for license plate detection
+  scoreThreshold: number = 0.5; // Raised to filter out garbage detections
 
   @input()
   @widget(new SliderWidget(0, 1, 0.01))
@@ -44,30 +44,31 @@ export class MLController extends BaseScriptComponent {
     "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"
   ].map((label, index) => ({ 
     label: label, 
-    enabled: index === 2 || index === 5 || index === 7 // Only enable car, bus, truck
+    enabled: index === 2 || index === 5 || index === 7 // Only car, bus, truck
   }));
 
   private classCount: number = 80; // COCO has 80 classes
 
+  // Anchors scaled for 224x224 input (instead of 320x320)
   private anchors: number[][][] = [
     [
-      [19, 27],
-      [44, 40],
-      [38, 94]
+      [13, 19],     // scaled down from [19, 27]
+      [31, 28],     // scaled down from [44, 40] 
+      [27, 66]      // scaled down from [38, 94]
     ],
     [
-      [96, 68],
-      [86, 152],
-      [180, 137]
+      [67, 48],     // scaled down from [96, 68]
+      [60, 107],    // scaled down from [86, 152]
+      [126, 96]     // scaled down from [180, 137]
     ],
     [
-      [140, 301],
-      [303, 264],
-      [238, 542]
+      [98, 211],    // scaled down from [140, 301]
+      [212, 185],   // scaled down from [303, 264]
+      [167, 380]    // scaled down from [238, 542]
     ],
   ];
 
-  private strides: number[] = [8, 16, 32];
+  private strides: number[] = [8, 16, 32]; // 224/28=8, 224/14=16, 224/7=32
 
   private currentFrame: number = 0;
 
@@ -112,7 +113,14 @@ export class MLController extends BaseScriptComponent {
     }
     this.inputShape = this.inputs[0].shape;
     print("[LOG] Input shape: " + this.inputShape.x + "x" + this.inputShape.y + "x" + this.inputShape.z);
+    print("[LOG] Camera input size: " + this.cameraService.inputSize + "x" + this.cameraService.inputSize);
     print("[LOG] Class count: " + this.classCount + ", Score threshold: " + this.scoreThreshold);
+    
+    // CRITICAL: Check if input sizes match
+    if (this.inputShape.x !== this.cameraService.inputSize || this.inputShape.y !== this.cameraService.inputSize) {
+      print("[ERROR] INPUT SIZE MISMATCH! Model expects " + this.inputShape.x + "x" + this.inputShape.y + 
+            " but camera provides " + this.cameraService.inputSize + "x" + this.cameraService.inputSize);
+    }
     this.inputs[0].texture = this.cameraService.screenCropTexture;
     // run on update
     //this.mlComponent.runScheduled(true, MachineLearning.FrameTiming.Update, MachineLearning.FrameTiming.Update);
@@ -234,6 +242,27 @@ export class MLController extends BaseScriptComponent {
     this.scores = [];
     const num_heads = outputs.length;
     print("[LOG] Parsing YOLO outputs - " + num_heads + " heads, " + this.classCount + " classes");
+    
+    // Log output shapes and validate against expected dimensions
+    const expectedShapes = [[28, 28, 255], [14, 14, 255], [7, 7, 255]];
+    for (let i = 0; i < outputs.length; i++) {
+      const output = outputs[i];
+      const shape = output.shape;
+      const expected = expectedShapes[i];
+      print("[LOG] Output " + i + " shape: " + shape.x + "x" + shape.y + "x" + shape.z);
+      
+      if (expected && (shape.x !== expected[0] || shape.y !== expected[1] || shape.z !== expected[2])) {
+        print("[ERROR] Output " + i + " shape mismatch! Expected " + expected.join("x") + 
+              " but got " + shape.x + "x" + shape.y + "x" + shape.z);
+      }
+      
+      // Show sample values but not all for debugging
+      print("[LOG] Output " + i + " sample values: " + 
+            output.data[0].toFixed(4) + ", " + output.data[1].toFixed(4) + ", " + 
+            output.data[2].toFixed(4) + ", " + output.data[3].toFixed(4) + ", " + 
+            output.data[4].toFixed(4) + "...");
+    }
+    
     let totalDetections = 0;
     for (let i = 0; i < num_heads; i++) {
       const output = outputs[i];
@@ -257,6 +286,8 @@ export class MLController extends BaseScriptComponent {
             let w = data[idx + 2];
             let h = data[idx + 3];
             let conf = data[idx + 4];
+
+            // Skip debug logging for now to reduce noise
 
             if (conf > this.scoreThreshold) {
               // print("[DEBUG] YOLO Parse - Found detection with conf: " + conf);

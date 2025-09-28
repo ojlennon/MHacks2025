@@ -1,6 +1,7 @@
 #!/bin/bash
-set -Eeuo pipefail
-set +x
 
-pip install -e .
-uvicorn coppa.main:app --reload;
+# Activate virtual environment if needed
+source /path/to/venv/bin/activate
+
+# Run FastAPI app using uvicorn
+uvicorn main:app --host 0.0.0.0 --port 8000

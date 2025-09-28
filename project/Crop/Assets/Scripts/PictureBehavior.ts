@@ -129,7 +129,7 @@ export class PictureBehavior extends BaseScriptComponent {
     
     let text = ""
     if (response) {
-      text = `License: ${response.plate}\nOwner: ${response.owner_name}\nDOB: ${response.dob}\nExpiry: ${response.license_ex_date}\nWarrant: ${response.has_warrant === true ? "YES" : "NO"}\nStolen: ${response.is_stolen === true ? "YES" : "NO"}`
+      text = `License: ${response.plate}\nOwner: ${response.owner_name}\nDOB: ${response.dob}\nExpiry: ${response.license_ex_date}\nWarrant: ${response.has_warrant === true ? "YES" : "NO"}\nWarrant Desc. ${response.warrant_reason}\nStolen: ${response.is_stolen === true ? "YES" : "NO"}`
     }
 
     this.caption.openCaption(text, captionPos, captionRot, textColor);

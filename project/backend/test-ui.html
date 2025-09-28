@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>License Plate OCR Test</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 600px; 
+            margin: 50px auto; 
+            padding: 20px; 
+        }
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            background: #f9f9f9;
+        }
+        .upload-area:hover {
+            border-color: #007bff;
+            background: #f0f8ff;
+        }
+        input[type="file"] {
+            margin: 10px;
+            padding: 10px;
+        }
+        input[type="url"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .error {
+            border-left-color: #dc3545 !important;
+            background: #f8d7da !important;
+        }
+        .success {
+            border-left-color: #28a745 !important;
+            background: #d4edda !important;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚗 License Plate OCR Test</h1>
+    
+    <div class="upload-area">
+        <h3>Method 1: Upload Image File</h3>
+        <input type="file" id="fileInput" accept="image/*">
+        <br>
+        <button onclick="uploadFile()">Extract from File</button>
+    </div>
+    
+    <div class="upload-area">
+        <h3>Method 2: Use Image URL</h3>
+        <input type="url" id="urlInput" placeholder="https://example.com/license-plate.jpg">
+        <br>
+        <button onclick="uploadUrl()">Extract from URL</button>
+    </div>
+    
+    <div class="upload-area">
+        <h3>Method 3: Use Base64 String</h3>
+        <textarea id="base64Input" placeholder="Paste base64 image string here..." style="width: 100%; height: 100px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;"></textarea>
+        <br>
+        <small style="color: #666;">You can paste either raw base64 or a complete data URL (data:image/jpeg;base64,...)</small>
+        <br><br>
+        <button onclick="uploadBase64()">Extract from Base64</button>
+    </div>
+    
+    <div id="result" style="display: none;"></div>
+
+    <script>
+        const API_URL = 'http://localhost:8000/extract';
+        
+        async function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                showResult('Please select a file first!', 'error');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            showResult('Processing image...', 'info');
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showResult(formatResult(result), 'success');
+                } else {
+                    showResult(`Error: ${result.detail}`, 'error');
+                }
+                
+            } catch (error) {
+                showResult(`Network error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function uploadUrl() {
+            const urlInput = document.getElementById('urlInput');
+            const imageUrl = urlInput.value.trim();
+            
+            if (!imageUrl) {
+                showResult('Please enter an image URL!', 'error');
+                return;
+            }
+            
+            showResult('Processing image URL...', 'info');
+            
+            try {
+                const response = await fetch(`${API_URL}?image_url=${encodeURIComponent(imageUrl)}`, {
+                    method: 'POST'
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showResult(formatResult(result), 'success');
+                } else {
+                    showResult(`Error: ${result.detail}`, 'error');
+                }
+                
+            } catch (error) {
+                showResult(`Network error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function uploadBase64() {
+            const base64Input = document.getElementById('base64Input');
+            const base64String = base64Input.value.trim();
+            
+            if (!base64String) {
+                showResult('Please enter a base64 string!', 'error');
+                return;
+            }
+            
+            showResult('Processing base64 image...', 'info');
+            
+            try {
+                const response = await fetch(`${API_URL}?base64_image=${encodeURIComponent(base64String)}`, {
+                    method: 'POST'
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showResult(formatResult(result), 'success');
+                } else {
+                    showResult(`Error: ${result.detail}`, 'error');
+                }
+                
+            } catch (error) {
+                showResult(`Network error: ${error.message}`, 'error');
+            }
+        }
+        
+        function formatResult(result) {
+            if (result.plate) {
+                let html = `<h4>🎯 Extracted Plate: ${result.plate}</h4>`;
+                
+                if (result.owner_name) {
+                    html += `
+                        <p><strong>Owner:</strong> ${result.owner_name}</p>
+                        <p><strong>DOB:</strong> ${result.dob}</p>
+                        <p><strong>Registration:</strong> ${result.registration_date}</p>
+                        <p><strong>Warrant:</strong> ${result.has_warrant ? '⚠️ YES - ' + result.warrant_reason : '✅ No'}</p>
+                        <p><strong>Stolen:</strong> ${result.is_stolen ? '🚨 YES' : '✅ No'}</p>
+                    `;
+                }
+                
+                return html;
+            } else {
+                return '<p>No license plate detected in the image.</p>';
+            }
+        }
+        
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = message;
+            resultDiv.className = type;
+            resultDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  plate-ocr:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: plate-ocr-app
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/plates"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    volumes:
+      # Mount logs directory if needed
+      - ./logs:/app/logs
+    networks:
+      - plate-ocr-network
+
+networks:
+  plate-ocr-network:
+    driver: bridge
+
+volumes:
+  app-logs:
+    driver: local

@@ -17,17 +17,17 @@ export class CaptionBehavior extends BaseScriptComponent {
     this.scaleTrans.setLocalScale(vec3.zero());
   }
 
-  openCaption(text: string, pos: vec3, rot: quat, backgroundColor?: vec4) {
+  openCaption(text: string, pos: vec3, rot: quat, textColor?: vec4) {
     this.startPos = pos;
     this.captionText.text = text;
     this.trans.setWorldPosition(pos);
     this.trans.setWorldRotation(rot);
     this.trans.setWorldScale(vec3.one().uniformScale(0.5));
     
-    // Set background color if provided and material exists
-    // if (backgroundColor && this.backgroundMaterial) {
-    //   this.backgroundMaterial.mainPass.baseColor = backgroundColor;
-    // }
+    // Change text color based on license status - much simpler!
+    if (textColor && this.captionText && this.captionText.textFill) {
+      this.captionText.textFill.color = textColor;
+    }
     
     //animate in caption
     if (this.scaleCancel) this.scaleCancel.cancel();

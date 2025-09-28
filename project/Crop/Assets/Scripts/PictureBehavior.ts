@@ -126,30 +126,29 @@ export class PictureBehavior extends BaseScriptComponent {
     var captionPos = topCenterPos.add(this.picAnchorTrans.up.uniformScale(1)); //1.5
     var captionRot = this.picAnchorTrans.getWorldRotation();
     
-    // Determine background color based on response parameters
-    var backgroundColor = this.getBackgroundColor(response);
+    // Determine text color based on license status
+    var textColor = this.getTextColor(response);
     
     let text = ""
     if (response) {
-      text = `License: ${response.plate} Owner: ${response.owner_name}\nDOB: ${response.dob}\nExpiry: ${response.license_ex_date}\nWarrant: ${response.has_warrant === true ? "YES" : "NO"}\nStolen: ${response.is_stolen === true ? "YES" : "NO"}`
+      text = `License: ${response.plate}\nOwner: ${response.owner_name}\nDOB: ${response.dob}\nExpiry: ${response.license_ex_date}\nWarrant: ${response.has_warrant === true ? "YES" : "NO"}\nStolen: ${response.is_stolen === true ? "YES" : "NO"}`
     }
 
-
-    this.caption.openCaption(text, captionPos, captionRot, backgroundColor);
+    this.caption.openCaption(text, captionPos, captionRot, textColor);
   }
 
-  private getBackgroundColor(response?: LicensePlateResponse): vec4 {
+  private getTextColor(response?: LicensePlateResponse): vec4 {
     if (!response) {
-      return new vec4(0.5, 0.5, 0.5, 0.8); // Default gray
+      return new vec4(1.0, 1.0, 1.0, 1.0); // Default white
     }
 
     // Color logic based on license plate response
     if (response.has_warrant) {
-      return new vec4(1.0, 0.2, 0.2, 0.9); // Red for warrant
+      return new vec4(1.0, 0.2, 0.2, 1.0); // Bright red for warrant
     } else if (response.is_stolen) {
-      return new vec4(1.0, 0.4, 0.0, 0.9); // Orange for stolen
+      return new vec4(1.0, 0.6, 0.0, 1.0); // Orange for stolen
     } else {
-      return new vec4(0.2, 0.8, 0.2, 0.8); // Green for clean record
+      return new vec4(0.2, 1.0, 0.2, 1.0); // Bright green for clean record
     }
   }
 

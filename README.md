@@ -1,4 +1,4 @@
-# coppa.ai
+#  EnforcAR
 
 An augmented reality law enforcement aid using Snapchat Spectacles. 
 

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EnforcAR - Effortless License Plate Scanning with AR-Powered Snap Spectacles</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Enforc<span class="accent">AR</span></h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#features" class="nav-link">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#use-cases" class="nav-link">Use Cases</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#demo" class="nav-link">Demo</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#roadmap" class="nav-link">Roadmap</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#faq" class="nav-link">FAQ</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Effortless License Plate Scanning with 
+                    <span class="accent">AR-Powered Snap Spectacles</span>
+                </h1>
+                <p class="hero-description">
+                    Transform law enforcement with hands-free, real-time license plate recognition. 
+                    Our advanced AR technology integrated with Snap Spectacles enables officers to 
+                    instantly identify vehicles and access critical data while keeping their hands 
+                    free and eyes on the road. Emergency escalation features coming soon.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="scrollToSection('demo')">
+                        <i class="fas fa-play"></i> Learn How It Works
+                    </button>
+                    <button class="btn btn-secondary" onclick="scrollToSection('contact')">
+                        <i class="fas fa-calendar"></i> Request a Demo
+                    </button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="ar-demo-container">
+                    <div class="spectacles-mockup">
+                        <div class="spectacles-frame">
+                            <div class="lens left-lens">
+                                <div class="ar-overlay">
+                                    <div class="plate-detection">
+                                        <div class="detection-box"></div>
+                                        <div class="plate-text">ABC-123</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="lens right-lens">
+                                <div class="ar-overlay">
+                                    <div class="data-display">
+                                        <div class="data-item">
+                                            <span class="label">Owner:</span>
+                                            <span class="value">John Doe</span>
+                                        </div>
+                                        <div class="data-item">
+                                            <span class="label">Status:</span>
+                                            <span class="value status-clear">Clear</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>About EnforcAR</h2>
+                <p>Revolutionizing law enforcement with cutting-edge AR technology</p>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <div class="problem-section">
+                        <h3>The Problem</h3>
+                        <p>
+                            Traditional license plate scanning is slow, inefficient, and dangerous. 
+                            Officers must pull out devices, take their eyes off the road, and manually 
+                            input data while maintaining situational awareness. This creates unnecessary 
+                            risks and delays in critical situations.
+                        </p>
+                    </div>
+                    <div class="solution-section">
+                        <h3>Our Solution</h3>
+                        <p>
+                            EnforcAR repurposes Snap Spectacles hardware with our proprietary software 
+                            to deliver hands-free, real-time license plate recognition. Officers can 
+                            scan plates instantly while keeping their hands free and eyes forward, 
+                            dramatically improving safety and efficiency.
+                        </p>
+                    </div>
+                </div>
+                <div class="about-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="stat-label">AI Plate Recognition</div>
+                        <div class="stat-description">Advanced artificial intelligence for accurate license plate detection</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-label">Real-Time Processing</div>
+                        <div class="stat-description">Instant license plate recognition and data retrieval</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="stat-label">Secure & Reliable</div>
+                        <div class="stat-description">Robust performance and data protection</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Powerful Features</h2>
+                <p>Everything you need for modern law enforcement</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>Instant License Plate Recognition</h3>
+                    <p>Scan any plate and pull up driver/vehicle details in real-time with our advanced computer vision technology.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-hand-paper"></i>
+                    </div>
+                    <h3>Hands-Free Operation</h3>
+                    <p>No need to pull out a device; information appears directly in your field of view through AR overlay.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>Emergency Escalation <span class="coming-soon">(Coming Soon)</span></h3>
+                    <p>One tap or voice command will notify backup units and dispatch instantly for rapid response. Currently in development.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section id="use-cases" class="use-cases">
+        <div class="container">
+            <div class="section-header">
+                <h2>Use Cases</h2>
+                <p>Real-world applications for modern law enforcement</p>
+            </div>
+            <div class="use-cases-grid">
+                <div class="use-case-card">
+                    <div class="use-case-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <h3>Traffic Stops</h3>
+                    <p>Quick vehicle checks without leaving the patrol car. Instantly verify driver information and vehicle status while maintaining safety.</p>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Surveillance & Monitoring</h3>
+                    <p>Scan vehicles discreetly during patrols. Monitor multiple vehicles simultaneously with continuous recognition capabilities.</p>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <h3>Emergency Scenarios <span class="coming-soon">(Planned)</span></h3>
+                    <p>Emergency escalation features are in development. Will enable one-touch emergency response for critical situations.</p>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h3>Officer Safety</h3>
+                    <p>Keep hands free and eyes forward, reducing distraction and risk. Enhanced situational awareness for safer operations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="demo">
+        <div class="container">
+            <div class="section-header">
+                <h2>How It Works</h2>
+                <p>See EnforcAR in action with our step-by-step demo</p>
+            </div>
+            <div class="demo-content">
+                <div class="demo-steps">
+                    <div class="step" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Wear the Spectacles</h3>
+                            <p>Simply put on the Snap Spectacles and power on the EnforcAR system.</p>
+                        </div>
+                    </div>
+                    <div class="step" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Look at the Plate</h3>
+                            <p>Direct your gaze at any license plate. Our AI automatically detects and recognizes it.</p>
+                        </div>
+                    </div>
+                    <div class="step" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>See Data in AR Overlay</h3>
+                            <p>Car and driver information appears instantly in your field of view.</p>
+                        </div>
+                    </div>
+                    <div class="step" data-step="4">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Trigger Escalation <span class="coming-soon">(Coming Soon)</span></h3>
+                            <p>Emergency escalation features are currently in development. Will enable voice command or gesture to notify dispatch instantly.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-visual">
+                    <div class="demo-video-container">
+                        <div class="video-placeholder">
+                            <i class="fas fa-play-circle"></i>
+                            <p>Interactive Demo Video</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Development Roadmap Section -->
+    <section id="roadmap" class="roadmap">
+        <div class="container">
+            <div class="section-header">
+                <h2>Development Roadmap</h2>
+                <p>What's coming next for EnforcAR</p>
+            </div>
+            <div class="roadmap-content">
+                <div class="roadmap-phase">
+                    <div class="phase-header">
+                        <div class="phase-number">1</div>
+                        <h3>Current Release</h3>
+                        <span class="phase-status current">Available Now</span>
+                    </div>
+                    <ul class="phase-features">
+                        <li>✓ Instant License Plate Recognition</li>
+                        <li>✓ Hands-Free Operation</li>
+                    </ul>
+                </div>
+                <div class="roadmap-phase">
+                    <div class="phase-header">
+                        <div class="phase-number">2</div>
+                        <h3>Emergency Features</h3>
+                        <span class="phase-status planned">Coming Soon</span>
+                    </div>
+                    <ul class="phase-features">
+                        <li>🔄 Emergency Escalation System</li>
+                        <li>🔄 Voice Command Integration</li>
+                        <li>🔄 Gesture Recognition</li>
+                        <li>🔄 One-Touch Dispatch Notification</li>
+                        <li>🔄 Real-Time Location Sharing</li>
+                    </ul>
+                </div>
+                <div class="roadmap-phase">
+                    <div class="phase-header">
+                        <div class="phase-number">3</div>
+                        <h3>Advanced Features</h3>
+                        <span class="phase-status future">Future</span>
+                    </div>
+                    <ul class="phase-features">
+                        <li>⏳ Multi-Vehicle Tracking</li>
+                        <li>⏳ Predictive Analytics</li>
+                        <li>⏳ AI-Powered Threat Assessment</li>
+                        <li>⏳ Advanced Reporting Tools</li>
+                        <li>⏳ Integration with Body Cameras</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+                <p>Everything you need to know about EnforcAR</p>
+            </div>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How accurate is the plate scanning?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>EnforcAR uses advanced computer vision technology for license plate recognition across various lighting conditions, weather, and plate types. Our AI system is designed to continuously learn and improve performance through real-world usage.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How does it connect to existing police databases?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>EnforcAR integrates seamlessly with existing law enforcement databases through secure APIs. We support all major database systems and can customize integration for specific agency needs.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>What security measures are in place?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We use military-grade encryption, secure authentication, and comply with all law enforcement data protection standards. All data transmission is encrypted and access is strictly controlled.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How does escalation notification work?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Emergency escalation features are currently in development. When released, officers will be able to trigger emergency escalation through voice commands, gesture recognition, or a simple tap. The system will instantly notify dispatch with location, vehicle information, and officer status.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Get Started Today</h2>
+                <p>Request a demo or get in touch with our team</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-form-centered">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="agency">Agency/Department</label>
+                            <input type="text" id="agency" name="agency" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" placeholder="Tell us about your needs..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Request Demo
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Enforc<span class="accent">AR</span></h3>
+                    <p>Revolutionizing law enforcement with AR technology.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#demo">Demo</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Training</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 EnforcAR. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+</body>
+</html>

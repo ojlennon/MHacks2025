@@ -70,12 +70,10 @@ export class PictureBehavior extends BaseScriptComponent {
           ProceduralTextureProvider.createFromTexture(this.screenCropTexture);
         this.chatGPT.makeImageRequest(
           this.captureRendMesh.mainPass.captureImage,
-          (response : LicensePlateResponse) => {
+          (response : LicensePlateResponse[]) => {
             this.loadingObj.enabled = false;
-            if (response.plate) {
-              this.loadCaption(response);
-            } else {
-              this.loadCaption(response);
+            if (response && response[0]) {
+              this.loadCaption(response[0]);
             }
           }
         );
@@ -173,9 +171,11 @@ export class PictureBehavior extends BaseScriptComponent {
 
       this.chatGPT.makeImageRequest(
         this.captureRendMesh.mainPass.captureImage,
-        (response : LicensePlateResponse) => {
+        (response : LicensePlateResponse[]) => {
           this.loadingObj.enabled = false;
-          this.loadCaption(response);
+          if (response && response[0]) {
+            this.loadCaption(response[0]);
+          }
         }
       );
     }

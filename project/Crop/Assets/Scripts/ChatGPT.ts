@@ -17,7 +17,7 @@ export class ChatGPT extends BaseScriptComponent {
   private ImageEncoding = EncodingType.Jpg;
   private internetModule:InternetModule = require("LensStudio:InternetModule");
 
-  private url = "https://plate-ocr-production.up.railway.app/extract-base64";
+  private url = "https://plate-ocr-production.up.railway.app/extract-all-plates-base64";
   onAwake() {}
 
   makeImageRequest(imageTex: Texture, callback) {
@@ -41,7 +41,7 @@ export class ChatGPT extends BaseScriptComponent {
   async sendGPTChat(
     request: string,
     image64: string,
-    callback: (response: LicensePlateResponse) => void
+    callback: (response: LicensePlateResponse[]) => void
   ) {
     print("Calling " + this.url)
     print("Sending base64 image length: " + image64.length)
@@ -62,7 +62,7 @@ export class ChatGPT extends BaseScriptComponent {
       })
       .then((data) => {
         print("Raw response data: " + JSON.stringify(data));
-        let licensePlateResponse = data as LicensePlateResponse;
+        let licensePlateResponse = data as LicensePlateResponse[];
         callback(licensePlateResponse);
       })
       .catch((e) => {

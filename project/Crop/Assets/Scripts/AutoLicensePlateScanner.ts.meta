@@ -1,0 +1,53 @@
+- !<AssetImportMetadata/e9d3778a-1fd5-4fb3-9738-7ce6e070ce86>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> 93de8d56-2a23-4f5a-8af4-f7fbc05175dd
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> 93de8d56-2a23-4f5a-8af4-f7fbc05175dd
+  PackageType: NotAPackage
+  PackagePolicy: CannotBeUnpacked
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> 4c0250bb-76a8-4004-801b-be4d0a70cb3c
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/4c0250bb-76a8-4004-801b-be4d0a70cb3c>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: a5afce98-e626-4149-8f2f-914c75070c25
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  CurrentVisibility: Editable
+  MaxVisibility: Editable
+  ScriptInputsHidden:
+    chatGPT: false
+    enableScanning: false
+    scanInterval: false
+    screenCropTexture: false
+    text: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  DefaultScriptInputs:
+    - chatGPT: !<MappingBased.AssignableType> 00000000-0000-0000-0000-000000000000
+      text: !<reference.Text> 00000000-0000-0000-0000-000000000000
+      screenCropTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
+      scanInterval: !<float> 2.000000
+      enableScanning: true
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - // @input AssignableType chatGPT
+    - // @input Component.Text text
+    - // @input Asset.Texture screenCropTexture
+    - // @input float scanInterval = 2
+    - // @input bool enableScanning = true
